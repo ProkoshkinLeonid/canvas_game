@@ -3,6 +3,9 @@ const context = canvas.getContext("2d")
 const startButton = document.getElementById('start-screen-button')
 const startScreen = document.getElementById('start-screen')
 
+canvas.width = innerWidth - 600
+canvas.height = innerHeight - 100
+
 const player = new Image()
 const background = new Image()
 const fg = new Image()
@@ -10,8 +13,8 @@ const pipeUp = new Image()
 const pipeBottom = new Image()
 
 player.src = 'assets/images/flappy_bird_bird.png'
-background.src = 'assets/images/bg_kirov.png'
-fg.src = 'assets/images/flappy_bird_fg.png'
+background.src = 'assets/images/background.webp'
+fg.src = 'assets/images/fg.webp'
 pipeUp.src = 'assets/images/flappy_bird_pipeUp.png'
 pipeBottom.src = 'assets/images/flappy_bird_pipeBottom.png'
 
@@ -46,12 +49,12 @@ startButton.addEventListener('click', () => {
 })
 
 const draw = () => {
-    context.drawImage(background, 0, 0, 288, 512)
+    context.drawImage(background, 0, 0)
     for(let i = 0; i < pipe.length; i++) {
-        score = i === 0 ? 0 : i - 1
+        score = i + 1
         context.drawImage(pipeUp, pipe[i].x, pipe[i].y)
-        context.drawImage(pipeBottom, pipe[i].x, pipe[i].y + pipeUp.height + gap)
-        pipe[i].x--
+        context.drawImage(pipeBottom, pipe[i].x, pipeUp.height + gap)
+        pipe[i].x = pipe[i].x - 2
 
         if (pipe[i].x === 90) {
             pipe.push({
@@ -63,12 +66,14 @@ const draw = () => {
         if (positionX + player.width >= pipe[i].x
             && positionX <= pipe[i].x + pipeUp.width
             && (positionY <= pipe[i].y + pipeUp.height
-            || positionY + player.height >= pipe[i].y + pipeUp.height + gap)) {
+            || positionY + player.height >= pipeUp.height + gap)
+            || positionY >= canvas.height - 200
+        ) {
             location.reload()
         }
     }
     context.drawImage(player, positionX, positionY)
-    context.drawImage(fg, 0, canvas.height - fg.height)
+    context.drawImage(fg, 0, canvas.height - 200, 1400, 200)
 
     positionY += grav
 
@@ -76,7 +81,7 @@ const draw = () => {
     context.font = "bold 40px white";
     context.textAlign = 'center';
     context.textBaseline = 'middle';
-    context.fillText(`score: ${score}`, 100, 70);
+    context.fillText(`score: ${score}`, canvas.width / 2, 70);
 
     requestAnimationFrame(draw)
 }
