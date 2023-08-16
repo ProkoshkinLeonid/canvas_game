@@ -1,14 +1,23 @@
-<!doctype html>
+     <!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <link rel="stylesheet" href="src/styles/index.css">
+    <title>Game</title>
 </head>
 <body>
-    <canvas id="canvas" width="288" height="512"></canvas>
+    <div class="start-screen" id="start-screen">
+        <div class="start-screen-content" id="start-screen-content">
+            <h1 class="start-screen-title">My Pretty Game</h1>
+            <div>
+                <a style="display: block" href="#" class="start-screen-button start-screen-button-white start-screen-button-animated" id="start-screen-button">Начать игру!</a>
+            </div>
+        </div>
+    </div>
+    <canvas style="display: none" id="canvas" width="288" height="512"></canvas>
     <script src="src/index.js"></script>
 </body>
 </html>

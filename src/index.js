@@ -1,5 +1,7 @@
 const canvas = document.getElementById("canvas")
 const context = canvas.getContext("2d")
+const startButton = document.getElementById('start-screen-button')
+const startScreen = document.getElementById('start-screen')
 
 const player = new Image()
 const background = new Image()
@@ -13,13 +15,18 @@ fg.src = 'assets/images/flappy_bird_fg.png'
 pipeUp.src = 'assets/images/flappy_bird_pipeUp.png'
 pipeBottom.src = 'assets/images/flappy_bird_pipeBottom.png'
 
-const gap = 90
 
-let positionX = 10
+// расстояние между верхней и нижней колонной
+const gap = 120
+// стартовая позиция юзера по x
+const positionX = 10
+// позиция юзера по y
 let positionY = 150
-const grav = 1.5
+// гравитация
+const grav = 0.7
+// очки игрока todo Доделать
 let score = 0
-
+// массив препятствий
 const pipe = []
 pipe[0] = {
     x: canvas.width,
@@ -28,24 +35,25 @@ pipe[0] = {
 
 
 const moveUp = () => {
-    positionY -= 35
+    positionY -= 33
 }
+startButton.addEventListener('click', () => {
+    canvas.style.display = 'block'
+    startScreen.style.display = 'none'
+    document.addEventListener('keydown', moveUp)
+    draw()
+    pipeBottom.onload = draw
+})
 
-document.addEventListener('keydown', moveUp)
-
-
-const incScore = () => {
-    setInterval(() => score++, 200)
-}
 const draw = () => {
     context.drawImage(background, 0, 0, 288, 512)
-
     for(let i = 0; i < pipe.length; i++) {
+        score = i === 0 ? 0 : i - 1
         context.drawImage(pipeUp, pipe[i].x, pipe[i].y)
         context.drawImage(pipeBottom, pipe[i].x, pipe[i].y + pipeUp.height + gap)
         pipe[i].x--
 
-        if (pipe[i].x === 125) {
+        if (pipe[i].x === 90) {
             pipe.push({
                 x: canvas.width,
                 y: Math.floor(Math.random() * pipeUp.height) - pipeUp.height
@@ -72,7 +80,3 @@ const draw = () => {
 
     requestAnimationFrame(draw)
 }
-
-incScore()
-
-pipeBottom.onload = draw
